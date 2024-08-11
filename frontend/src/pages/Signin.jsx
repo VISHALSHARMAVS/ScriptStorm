@@ -1,15 +1,17 @@
 import { Link,useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import {useDispatch,useSelector} from "react-redux";
+import { signInFailure,signInSuccess,signInStart } from "../redux/feature/userSlice";
 
 
 function Signin() {
     const [username, setUsername] = useState("");
     // const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-
+   const{loading,error:error} = useSelector(state => state.user)
+    
+    const dispatch = useDispatch()
     const navigate = useNavigate();
 
 
@@ -17,14 +19,13 @@ function Signin() {
         e.preventDefault();
 
         if (!username  || !password) {
-            return setError('Please fill out all fields.');
+            return dispatch(signInFailure('Please fill out all fields.'));
         }
 
-        setLoading(true);
-        setError(null);
+       
 
         try {
-            
+            dispatch(signInStart())
             const res = await axios.post('http://localhost:3000/api/v1/auth/signin', {
                 username,
                 password
@@ -35,14 +36,13 @@ function Signin() {
             // Handle successful signup
             if (res.data.message === 'User Loggedin successfully') {
                 // Redirect or show success message
-                setLoading(false)
+                dispatch(signInSuccess(res.data))
                 navigate('/');
             }
         } catch (err) {
             // Extract error message based on the response structure
             const errorMessage = err.response?.data?.message || 'An error occurred. Please try again.';
-            setError(errorMessage);
-            setLoading(false);
+           dispatch(signInFailure(errorMessage));
         } 
     };
 
