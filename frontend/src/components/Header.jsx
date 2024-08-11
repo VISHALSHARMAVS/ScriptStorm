@@ -47,8 +47,8 @@ function Header() {
         </button>
 
         <Link to="/sign-in">
-          <button className="bg-gradient-to-r from-indigo-900 to-red-900 text-white px-4 py-2 rounded-lg w-fit">
-            Sign In
+          <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold w-fit">
+            SignIn
           </button>
         </Link>
 
