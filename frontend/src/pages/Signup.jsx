@@ -24,8 +24,7 @@ function Signup() {
         setError(null);
 
         try {
-            console.log('Sending request with:', { username, email, password });  // Debugging line
-
+            
             const res = await axios.post('http://localhost:3000/api/v1/auth/signup', {
                 username,
                 email,
@@ -37,14 +36,12 @@ function Signup() {
             // Handle successful signup
             if (res.data.message === 'User registered successfully') {
                 // Redirect or show success message
-                console.log('Signup successful:', res.data);  // Debugging line
                 setLoading(false)
                 navigate('/');
             }
         } catch (err) {
             // Extract error message based on the response structure
             const errorMessage = err.response?.data?.message || 'An error occurred. Please try again.';
-            console.error('Error during signup:', errorMessage);  // Debugging line
             setError(errorMessage);
             setLoading(false);
         } 
