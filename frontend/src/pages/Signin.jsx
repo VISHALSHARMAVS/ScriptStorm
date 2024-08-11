@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import {useDispatch,useSelector} from "react-redux";
 import { signInFailure,signInSuccess,signInStart } from "../redux/feature/userSlice";
+import OAuth from "../components/OAuth";
 
 
 function Signin() {
@@ -104,6 +105,7 @@ function Signin() {
                         >
                             {loading ? 'Signing In...' : 'Sign In'}
                         </button>
+                        <OAuth/>
                     </form>
                     <div className="flex gap-2 text-sm mx-6 mt-4">
                         <span>{`Don't Have an account?`}</span>
