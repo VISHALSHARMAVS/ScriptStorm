@@ -3,7 +3,7 @@ import { BsFacebook, BsTwitter, BsLinkedin, BsGithub } from "react-icons/bs";
 
 function Footer() {
     return (
-        <footer className="border-t-2 border-teal-500 py-8 bg-gray-100">
+        <footer className="border-t-2 border-teal-500 py-2 bg-gray-100">
             <div className="w-full max-w-7xl mx-auto px-4">
                 <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
                     <div className="mt-5">
