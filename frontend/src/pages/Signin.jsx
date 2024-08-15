@@ -1,50 +1,66 @@
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import {useDispatch,useSelector} from "react-redux";
-import { signInFailure,signInSuccess,signInStart } from "../redux/feature/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { signInFailure, signInSuccess, signInStart } from "../redux/feature/userSlice";
 import OAuth from "../components/OAuth";
-
 
 function Signin() {
     const [username, setUsername] = useState("");
-    // const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-   const{loading,error:error} = useSelector(state => state.user)
-    
-    const dispatch = useDispatch()
-    const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState(""); // State for error message
+    const { loading } = useSelector(state => state.user);
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!username  || !password) {
-            return dispatch(signInFailure('Please fill out all fields.'));
+        if (!username || !password) {
+            setErrorMessage('Please fill out all fields.');
+            return;
         }
 
-       
+        dispatch(signInStart());
 
         try {
-            dispatch(signInStart())
             const res = await axios.post('http://localhost:3000/api/v1/auth/signin', {
                 username,
                 password
             });
 
-            
-
-            // Handle successful signup
             if (res.data.message === 'User Loggedin successfully') {
-                // Redirect or show success message
-                dispatch(signInSuccess(res.data))
+                dispatch(signInSuccess(res.data));
                 navigate('/');
+            } else {
+                setErrorMessage('Unexpected response from server.');
             }
         } catch (err) {
-            // Extract error message based on the response structure
-            const errorMessage = err.response?.data?.message || 'An error occurred. Please try again.';
-           dispatch(signInFailure(errorMessage));
-        } 
+            let errorMsg = 'An error occurred. Please try again.';
+
+            if (err.response) {
+                switch (err.response.status) {
+                    case 400:
+                        errorMsg = 'Invalid username or password. Please check your credentials and try again.';
+                        break;
+                    case 401:
+                        errorMsg = 'Unauthorized access. Please login again.';
+                        break;
+                    case 500:
+                        errorMsg = 'Server error. Please try again later.';
+                        break;
+                    default:
+                        errorMsg = err.response.data?.message || 'An unexpected error occurred.';
+                        break;
+                }
+            } else if (err.request) {
+                errorMsg = 'No response from server. Please check your internet connection and try again.';
+            }
+
+            setErrorMessage(errorMsg);
+            dispatch(signInFailure(errorMsg));
+        }
     };
 
     return (
@@ -63,7 +79,7 @@ function Signin() {
                         This is a demo project. You can sign up with your email and password.
                     </p>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 h-full">
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-4 rounded w-full max-w-sm mx-auto">
                         <div className="flex flex-col">
                             <label htmlFor="username" className="text-sm font-medium text-gray-700">Your Username:</label>
@@ -76,17 +92,6 @@ function Signin() {
                                 className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
-                        {/* <div className="flex flex-col">
-                            <label htmlFor="email" className="text-sm font-medium text-gray-700">Your Email:</label>
-                            <input
-                                onChange={(e) => setEmail(e.target.value.trim())}
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="email"
-                                className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div> */}
                         <div className="flex flex-col">
                             <label htmlFor="password" className="text-sm font-medium text-gray-700">Your Password:</label>
                             <input
@@ -98,6 +103,11 @@ function Signin() {
                                 className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
+                        {errorMessage && (
+                        <div className="text-red-500 font-medium rounded-md">
+                            {errorMessage}
+                        </div>
+                    )}
                         <button
                             type="submit"
                             disabled={loading}
@@ -105,17 +115,16 @@ function Signin() {
                         >
                             {loading ? 'Signing In...' : 'Sign In'}
                         </button>
-                        <OAuth/>
+                      
                     </form>
+                    <div className="flex flex-col px-4 rounded w-full max-w-sm mx-auto">
+                        <OAuth />
+                    </div>
                     <div className="flex gap-2 text-sm mx-6 mt-4">
                         <span>{`Don't Have an account?`}</span>
                         <Link to='/sign-up' className="text-blue-500">Sign Up</Link>
                     </div>
-                    {error && (
-                        <div className="mt-5 p-4 bg-red-500 text-white rounded-md">
-                            {error}
-                        </div>
-                    )}
+                   
                 </div>
             </div>
         </div>

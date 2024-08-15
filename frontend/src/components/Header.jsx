@@ -79,13 +79,13 @@ const {theme} = useSelector(state=>state.theme)
           <div ref={dropdownRef}>
             <button
               onClick={toggleDropdown}
-              className="flex items-center space-x-2 bg-gray-200 p-2 rounded-full"
+              className="flex items-center space-x-2 bg-gray-200  rounded-full"
               aria-label="User Menu"
             >
               <img
-                src={currentUser.photo}
+                src={currentUser.profilePicture}
                 alt="user"
-                className="w-8 h-8 rounded-full"
+                className="w-10 h-10 rounded-full"
               />
             </button>
             {isDropdownOpen && (

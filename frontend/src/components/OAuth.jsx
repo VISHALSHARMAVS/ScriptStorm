@@ -16,36 +16,34 @@ export default function OAuth() {
 
         try {
             // Sign in with Google
-            const resultFromGoogle = await signInWithPopup(auth, provider);
-            const { user } = resultFromGoogle;
-            const { email, displayName, photoURL } = user;
-
+            const resultFromGoogle = await signInWithPopup(auth, provider)
+            console.log(resultFromGoogle.user.photoURL);
+            
             // Send user data to the server
-            const res = await axios.post('http://localhost:3000/api/v1/auth/google', {
-                email,
-                name: displayName,
-                googlePhotoUrl: photoURL
-            });
+            const response = await axios.post('http://localhost:3000/api/v1/auth/google', {
+        name: resultFromGoogle.user.displayName,
+        email: resultFromGoogle.user.email,
+        googlePhotoUrl: resultFromGoogle.user.photoURL,
+    });
 
-            if (res.status >= 200 && res.status < 300) {
-                dispatch(signInSuccess(res.data))
-                navigate('/');
-            } else {
-                console.error('Failed to authenticate:', res.statusText);
-            }
-           
-        } catch (error) {
-            console.error("Error during Google sign-in:", error);
-        }
+    if (response.status === 200) {
+        dispatch(signInSuccess(response.data));
+        navigate('/');
+    }
+} catch (error) {
+    console.log(error);
+}
     };
 
     return (
         <button 
             onClick={handleGoogleClick} 
-            className="flex items-center bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:bg-gradient-to-t hover:from-orange-500 hover:to-pink-500"
+            
+
+            className="flex items-center bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:bg-gradient-to-t hover:from-orange-500 hover:to-pink-500    disabled:opacity-50 disabled:cursor-not-allowed"
         >
             <AiFillGoogleCircle className="w-6 h-6 mr-2" />
             Continue with Google
         </button>
     );
-}
+}   

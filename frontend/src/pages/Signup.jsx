@@ -8,7 +8,7 @@ function Signup() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
+    const [errorMessage, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -99,6 +99,11 @@ function Signup() {
                                 className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
+                        {errorMessage && (
+                        <div className="text-red-500 font-medium rounded-md">
+                            {errorMessage}
+                        </div>
+                    )}
                         <button
                             type="submit"
                             disabled={loading}
@@ -106,17 +111,16 @@ function Signup() {
                         >
                             {loading ? 'Signing Up...' : 'Sign Up'}
                         </button>
-                        <OAuth/>
+                        
                     </form>
+                    <div className="flex flex-col px-4 rounded w-full max-w-sm mx-auto">
+                        <OAuth />
+                    </div>  
                     <div className="flex gap-2 text-sm mx-6 mt-4">
                         <span>Have an account?</span>
                         <Link to='/sign-in' className="text-blue-500">Sign In</Link>
                     </div>
-                    {error && (
-                        <div className="mt-5 p-4 bg-red-500 text-white rounded-md">
-                            {error}
-                        </div>
-                    )}
+                    
                 </div>
             </div>
         </div>
