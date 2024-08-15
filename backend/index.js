@@ -1,12 +1,16 @@
 import express from 'express'
 import connectDB from './db.js';
 import authRoute from './routes/auth.route.js'
+import userRoute from './routes/user.route.js'
 import cors from 'cors'
+import cookieParser from 'cookie-parser';
 const app = express();
 app.use(cors());
 connectDB();
 app.use(express.json());
+app.use(cookieParser())
 app.use('/api/v1/auth',authRoute)
+app.use('/api/v1/user',userRoute)
 
 
 app.use((err,req,res,next)=>{

@@ -50,9 +50,10 @@ export const signIn = async(req,res,next)=>{
             process.env.JWT_SECRET,
             {expiresIn:'1d'}
         )
+        const { password: pass, ...rest } = validUser._doc;
         res.status(200).cookie('token',token,{
             httpOnly:true,
-        }).json({message:"User Loggedin successfully"})
+        }).json({message:"User Loggedin successfully",rest})
     } catch (error) {
         next(error)
     }
