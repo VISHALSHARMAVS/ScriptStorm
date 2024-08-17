@@ -30,7 +30,7 @@ function Signin() {
                 password
             });
 
-            if (res.data.message === 'User Loggedin successfully') {
+            if (res.data.success) {
                 dispatch(signInSuccess(res.data));
                 navigate('/');
             } else {
