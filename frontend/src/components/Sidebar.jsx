@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { HiArrowSmRight, HiUser } from "react-icons/hi";
+import { HiArrowSmRight, HiUser,HiDocumentText } from "react-icons/hi";
 import { IoMdCreate } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { signoutSuccess } from "../redux/feature/userSlice";
 function Sidebar() {
   const location = useLocation();
   const [tab, setTab] = useState("");
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromURL = urlParams.get("tab");
@@ -34,18 +35,34 @@ function Sidebar() {
       <div className="flex flex-col p-4">
         <Link to="/dashboard?tab=profile">
           <div
-            className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer ${
+            className={`flex items-center  p-3 mb-2 rounded-lg hover:text-white cursor-pointer ${
               tab === "profile" ? "bg-gray-700 text-white" : "hover:bg-gray-800"
             }`}
           >
             <HiUser className="mr-3 text-2xl" />
             <span
-              className={`text-lg ${tab === "profile" ? "font-semibold" : ""}`}
+              className={`text-lg flex items-center justify-between gap-10 ${tab === "profile" ? "font-semibold" : ""}`}
             >
-              Profile
+              Profile <span className=" text-sm font-medium ">{currentUser.isAdmin ? 'Admin': 'User'}</span>
             </span>
           </div>
         </Link>
+
+        <Link to="/dashboard?tab=posts">
+          <div
+            className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer hover:text-white ${
+              tab === "posts" ? "bg-gray-700 text-white" : "hover:bg-gray-800"
+            }`}
+          >
+            <HiDocumentText className="mr-3 text-2xl" />
+            <span
+              className={`text-lg ${tab === "posts" ? "font-semibold" : ""}`}
+            >
+              Posts
+            </span>
+          </div>
+        </Link>
+
         <Link to="/create-post">
           <div
             className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white `}

@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-
+      default:'https://cdn.mos.cms.futurecdn.net/VT9LedJdirBshoDFnMJEjS-650-80.jpg.webp'
     },
     category: {
       type: String,

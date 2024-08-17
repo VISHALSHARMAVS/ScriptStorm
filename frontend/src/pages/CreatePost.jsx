@@ -65,7 +65,7 @@ export default function CreatePost() {
             }
           
             setPublishError(null);
-            navigate(`/post/${res.data.post.slug}`);
+            navigate(`/dashboard?tab=posts`);
           } catch (error) {
             if (error.response) {
               // The request was made, but the server responded with a status code that is not in the range of 2xx
