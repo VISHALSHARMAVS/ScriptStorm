@@ -28,7 +28,7 @@ function Signin() {
             const res = await axios.post('http://localhost:3000/api/v1/auth/signin', {
                 username,
                 password
-            });
+            },{withCredentials:true});
 
             if (res.data.success) {
                 dispatch(signInSuccess(res.data));
@@ -62,6 +62,8 @@ function Signin() {
             dispatch(signInFailure(errorMsg));
         }
     };
+   
+    
 
     return (
         <div className="min-h-screen mt-20">
@@ -132,3 +134,7 @@ function Signin() {
 }
 
 export default Signin;
+
+
+
+

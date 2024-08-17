@@ -1,16 +1,16 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { updateStart, updateSuccess, updateFailure } from '../redux/feature/userSlice';
+import { updateStart, updateSuccess, updateFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure, } from '../redux/feature/userSlice';
 import { useDispatch } from 'react-redux';
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Alert from './Alert';
 import axios from 'axios';
-
+import Modal from './Modal';
 function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser , error} = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -18,6 +18,7 @@ function Profile() {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [updateUserError, setUpdateUserError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     profilePicture: currentUser?.profilePicture || ''
   });
@@ -110,6 +111,24 @@ function Profile() {
     return <div>No Current User </div>; 
   }
 
+  const handleDeleteUser = async () => {
+    setShowModal(false);
+    try {
+      dispatch(deleteUserStart());
+      const res = await axios.delete(`http://localhost:3000/api/v1/user/delete/${currentUser._id}` ,  { withCredentials: true })
+      const data = await res.data;
+      console.log(data,data.success);
+      
+      if (!data.success) {
+        dispatch(deleteUserFailure(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
       <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
@@ -188,11 +207,17 @@ function Profile() {
         </button>
       </form>
       <div className='text-red-500 flex justify-between mt-5'>
-        <span className='cursor-pointer'>Delete Account</span>
+        <span className='cursor-pointer' onClick={() => setShowModal(true)}>Delete Account</span>
         <span className='cursor-pointer'>Sign Out</span>
       </div>
       {updateUserSuccess && <Alert color='success' className='mt-5'>{updateUserSuccess}</Alert>}
       {updateUserError && <Alert color='failure' className='mt-5'>{updateUserError}</Alert>}
+      {error && (
+        <Alert color='failure' className='mt-5'>
+          {error}
+        </Alert>
+      )}
+      <Modal show={showModal} onClose={()=>setShowModal(false)} handleDeleteUser={handleDeleteUser}/>
     </div>
   );
 }
