@@ -22,8 +22,16 @@ export const signUp = async (req, res, next) => {
         if (!user) {
             return res.status(500).json({ message: 'User registration failed' });
         }
+        const token = jwt.sign({
+            id:user._id},
+            process.env.JWT_SECRET,
+            {expiresIn:'1d'}
+        )
+        const { password: pass, ...rest } = user._doc;
 
-        res.status(201).json({ message: 'User registered successfully' });
+        res.status(200).cookie('token',token,{
+            httpOnly:true,
+        }).json({success:true, ...rest});
 
     } catch (error) {
         next(error);

@@ -11,7 +11,7 @@ const Modal = ({ show, onClose, handleDeleteUser }) => {
         <div className="p-4">
           <button
             onClick={onClose}
-            className="float-right text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="float-right  text-gray-400 text-3xl hover:text-gray-600 dark:hover:text-gray-300"
           >
             &times;
           </button>

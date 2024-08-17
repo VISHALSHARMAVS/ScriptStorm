@@ -2,50 +2,71 @@ import { Link,useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import OAuth from "../components/OAuth";
+import { signInFailure, signInSuccess, signInStart } from "../redux/feature/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 
 
 function Signup() {
+    const dispatch = useDispatch()
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
+   
 
     const navigate = useNavigate();
+    const { loading } = useSelector(state => state.user);
+
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!username || !email || !password) {
-            return setError('Please fill out all fields.');
+        if (!username || !password) {
+            setError('Please fill out all fields.');
+            return;
         }
 
-        setLoading(true);
-        setError(null);
+        dispatch(signInStart());
 
         try {
-            
             const res = await axios.post('http://localhost:3000/api/v1/auth/signup', {
                 username,
                 email,
                 password
-            });
-
-            
-
-            // Handle successful signup
-            if (res.data.message === 'User registered successfully') {
-                // Redirect or show success message
-                setLoading(false)
+            },{withCredentials:true});                
+            if (res.data.success) {
+                dispatch(signInSuccess(res.data));
                 navigate('/');
+            } else {
+                setError('Unexpected response from server.');
             }
         } catch (err) {
-            // Extract error message based on the response structure
-            const errorMessage = err.response?.data?.message || 'An error occurred. Please try again.';
-            setError(errorMessage);
-            setLoading(false);
-        } 
+            let errorMsg = 'An error occurred. Please try again.';
+
+            if (err.response) {
+                switch (err.response.status) {
+                    case 400:
+                        errorMsg = 'Invalid username or password. Please check your credentials and try again.';
+                        break;
+                    case 401:
+                        errorMsg = 'Unauthorized access. Please login again.';
+                        break;
+                    case 500:
+                        errorMsg = 'Server error. Please try again later.';
+                        break;
+                    default:
+                        errorMsg = err.response.data?.message || 'An unexpected error occurred.';
+                        break;
+                }
+            } else if (err.request) {
+                errorMsg = 'No response from server. Please check your internet connection and try again.';
+            }
+
+            setError(errorMsg);
+            dispatch(signInFailure(errorMsg));
+        }
     };
 
     return (
