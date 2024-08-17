@@ -116,9 +116,7 @@ function Profile() {
     try {
       dispatch(deleteUserStart());
       const res = await axios.delete(`http://localhost:3000/api/v1/user/delete/${currentUser._id}` ,  { withCredentials: true })
-      const data = await res.data;
-      console.log(data,data.success);
-      
+      const data = await res.data;      
       if (!data.success) {
         dispatch(deleteUserFailure(data.message));
       } else {
@@ -189,7 +187,6 @@ function Profile() {
             className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${imageFileUploadProgress && imageFileUploadProgress < 100 && 'opacity-60'}`}
           />
         </div>
-        {imageFileUploadError && <Alert color='failure'>{imageFileUploadError}</Alert>}
         <div className='flex flex-col'>
           <input
             type='text'
@@ -230,6 +227,7 @@ function Profile() {
         <span className='cursor-pointer' onClick={() => setShowModal(true)}>Delete Account</span>
         <span className='cursor-pointer' onClick={handleSignOut}>Sign Out</span>
       </div>
+      {imageFileUploadError && <Alert color='failure'>{imageFileUploadError}</Alert>}
       {updateUserSuccess && <Alert color='success' className='mt-5'>{updateUserSuccess}</Alert>}
       {updateUserError && <Alert color='failure' className='mt-5'>{updateUserError}</Alert>}
       {error && (

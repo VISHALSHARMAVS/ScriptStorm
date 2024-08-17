@@ -24,7 +24,7 @@ export default function OAuth() {
         name: resultFromGoogle.user.displayName,
         email: resultFromGoogle.user.email,
         googlePhotoUrl: resultFromGoogle.user.photoURL,
-    });
+    },{withCredentials:true});
 
     if (response.status === 200) {
         dispatch(signInSuccess(response.data));

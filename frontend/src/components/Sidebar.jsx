@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { HiArrowSmRight, HiUser } from "react-icons/hi";
+import { IoMdCreate } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -42,6 +43,19 @@ function Sidebar() {
               className={`text-lg ${tab === "profile" ? "font-semibold" : ""}`}
             >
               Profile
+            </span>
+          </div>
+        </Link>
+        <Link to="/create-post">
+          <div
+            className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white `}
+          >
+            <IoMdCreate className="mr-3 text-2xl"  />
+          
+            <span
+              className={`text-lg `}
+            >
+              Create Post
             </span>
           </div>
         </Link>
