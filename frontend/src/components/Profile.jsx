@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { updateStart, updateSuccess, updateFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure, } from '../redux/feature/userSlice';
+import { updateStart, updateSuccess, updateFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure,signoutSuccess } from '../redux/feature/userSlice';
 import { useDispatch } from 'react-redux';
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
@@ -129,6 +129,26 @@ function Profile() {
     }
   };
 
+
+  const handleSignOut = async ()=>{
+
+  try {
+    const res=  await axios.post('http://localhost:3000/api/v1/user/signout')
+
+   
+
+    if (res.status===200) {
+      dispatch(signoutSuccess())
+    }
+    else{
+      console.log(res.message);
+      
+    }
+  } catch (error) {
+    console.log(error);
+    
+  }
+  }
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
       <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
@@ -208,7 +228,7 @@ function Profile() {
       </form>
       <div className='text-red-500 flex justify-between mt-5'>
         <span className='cursor-pointer' onClick={() => setShowModal(true)}>Delete Account</span>
-        <span className='cursor-pointer'>Sign Out</span>
+        <span className='cursor-pointer' onClick={handleSignOut}>Sign Out</span>
       </div>
       {updateUserSuccess && <Alert color='success' className='mt-5'>{updateUserSuccess}</Alert>}
       {updateUserError && <Alert color='failure' className='mt-5'>{updateUserError}</Alert>}

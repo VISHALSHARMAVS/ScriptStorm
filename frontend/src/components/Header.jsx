@@ -6,6 +6,8 @@ import {FaSun} from "react-icons/fa"
 import { FiMenu, FiX } from "react-icons/fi";
 import { useSelector,useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
+import { signoutSuccess } from "../redux/feature/userSlice";
+import axios from "axios";    
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,6 +42,26 @@ const {theme} = useSelector(state=>state.theme)
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleSignOut = async ()=>{
+
+    try {
+      const res=  await axios.post('http://localhost:3000/api/v1/user/signout')
+  
+     
+  
+      if (res.status===200) {
+        dispatch(signoutSuccess())
+      }
+      else{
+        console.log(res.message);
+        
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
+    }
 
   return (
     <nav className="border-b-2 flex justify-between items-center h-16 mx-4 relative">
@@ -104,7 +126,7 @@ const {theme} = useSelector(state=>state.theme)
                   </button>
                 </Link>
                 <div className="border-t border-gray-200"></div>
-                <button className="w-full text-left px-4 py-2 hover:bg-gray-100">
+                <button onClick={handleSignOut} className="w-full text-left px-4 py-2 hover:bg-gray-100">
                   Sign Out
                 </button>
               </div>
