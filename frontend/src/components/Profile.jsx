@@ -235,7 +235,7 @@ function Profile() {
           {error}
         </Alert>
       )}
-      <Modal show={showModal} onClose={()=>setShowModal(false)} handleDeleteUser={handleDeleteUser}/>
+      <Modal show={showModal} onClose={()=>setShowModal(false)} handleDeleteUser={handleDeleteUser} heading={'Are you sure you want to delete your account?'}/>
     </div>
   );
 }
