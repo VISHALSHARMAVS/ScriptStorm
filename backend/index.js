@@ -9,7 +9,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser';
 const app = express();
 const corsOptions = {
-    origin: 'https://scriptstorm-2.onrender.com',
+    origin: 'https://scriptstorm.onrender.com/',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true
   };
