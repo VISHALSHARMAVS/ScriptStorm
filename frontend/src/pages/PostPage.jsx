@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import CommentSection from '../components/CommentSection';
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -77,6 +78,7 @@ export default function PostPage() {
         className='p-3 max-w-2xl mx-auto self-center w-full post-content'
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
+      <CommentSection postId={post._id} />
     </main>
   );
 }
