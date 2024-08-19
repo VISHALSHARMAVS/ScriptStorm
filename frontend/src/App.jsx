@@ -10,6 +10,7 @@ import Footer from "./components/Footer"
 import PrivateRoute from "./components/PrivateRoute"
 import CreatePost from "./pages/CreatePost"
 import UpdatePost from "./components/UpdatePost"
+import PostPages from "./pages/PostPage"
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/create-post" element={<CreatePost/>}/>
         <Route path='/update-post/:postId' element={<UpdatePost />} />
         </Route>
+        <Route path='/post/:postSlug' element={<PostPages />} />
         <Route path="/about" element={<About/>}/>
         <Route path="/projects" element={<Projects/>}/>
       </Routes>
