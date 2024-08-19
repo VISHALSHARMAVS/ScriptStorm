@@ -10,7 +10,8 @@ ScriptStorm is a full-stack web application designed to manage and streamline th
 - **Responsive UI**: Built with React and styled using Tailwind CSS.
 
 ## Live Demo
-Check out the live version of the application at: ScriptStorm
+
+Check out the live version of the application at: [ScriptStorm](https://scriptstorm.onrender.com)
 
 ## Installation
 
