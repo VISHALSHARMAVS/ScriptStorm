@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { HiArrowSmRight, HiUser,HiDocumentText,HiOutlineUserGroup } from "react-icons/hi";
+import { HiArrowSmRight, HiUser,HiDocumentText,HiOutlineUserGroup, HiAnnotation, HiChartPie } from "react-icons/hi";
 
 import { IoMdCreate } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
@@ -77,21 +77,53 @@ function Sidebar() {
             </span>
           </div>
         </Link>
-        {currentUser.isAdmin&&(
+        {currentUser.isAdmin&&(<>
           <Link to="/dashboard?tab=users">
           <div
             className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer hover:text-white ${
               tab === "users" ? "bg-gray-700 text-white" : "hover:bg-gray-800"
             }`}
-          >
+            >
             <HiOutlineUserGroup className="mr-3 text-2xl" />
             <span
               className={`text-lg ${tab === "users" ? "font-semibold" : ""}`}
-            >
+              >
               Users
             </span>
           </div>
-        </Link>)}
+        </Link>
+        
+        <Link to="/dashboard?tab=comments">
+          <div
+            className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer hover:text-white ${
+              tab === 'comments' ? "bg-gray-700 text-white" : "hover:bg-gray-800"
+            }`}
+            >
+            <HiAnnotation className="mr-3 text-2xl" />
+            <span
+              className={`text-lg ${tab === 'comments' ? "font-semibold" : ""}`}
+              >
+              Comments
+            </span>
+          </div>
+        </Link>
+        <Link to="/dashboard?tab=dash">
+          <div
+            className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer hover:text-white ${
+              tab === 'dash' ? "bg-gray-700 text-white" : "hover:bg-gray-800"
+            }`}
+            >
+            <HiChartPie className="mr-3 text-2xl" />
+            <span
+              className={`text-lg ${tab === 'dash' ? "font-semibold" : ""}`}
+              >
+              Dashboard
+            </span>
+          </div>
+        </Link>
+              </>
+        )
+        }
         <div className="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white">
           <HiArrowSmRight className="mr-3 text-2xl" />
           <span className="text-lg" onClick={handleSignOut}>
