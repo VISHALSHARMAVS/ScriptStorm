@@ -6,6 +6,9 @@ export const createPost = async (req, res, next) => {
   if (!req.body.title || !req.body.content) {
     return next(errorHandler(400, 'Please provide all required fields'));
   }
+ 
+  
+  
   const slug = req.body.title
     .split(' ')
     .join('-')
@@ -43,14 +46,16 @@ export const getposts = async (req, res, next) => {
           { content: { $regex: req.query.searchTerm, $options: 'i' } },
         ],
       }),
-    })
+    }).populate('userId','username')
       .sort({ updatedAt: sortDirection })
       .skip(startIndex)
-      .limit(limit);
+      .limit(limit)
 
     const totalPosts = await Post.countDocuments();
-
+  
+   
     const now = new Date();
+
 
     const oneMonthAgo = new Date(
       now.getFullYear(),
