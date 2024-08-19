@@ -9,6 +9,9 @@ ScriptStorm is a full-stack web application designed to manage and streamline th
 - **Commenting System**: Users can add comments to posts.
 - **Responsive UI**: Built with React and styled using Tailwind CSS.
 
+## Live Demo
+Check out the live version of the application at: ScriptStorm
+
 ## Installation
 
 1. **Clone the repository:**
