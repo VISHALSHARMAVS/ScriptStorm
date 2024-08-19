@@ -64,7 +64,7 @@ const {theme} = useSelector(state=>state.theme)
     }
 
   return (
-    <nav className="border-b-2 flex justify-between items-center h-16 mx-4 relative">
+    <nav className="border-b-2 flex justify-between items-center h-16 mx-4  relative">
       <Link
         to="/"
         className={`self-center whitespace-nowrap text-sm sm:text-lg font-semibold dark:text-white ${
