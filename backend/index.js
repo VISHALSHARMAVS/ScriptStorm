@@ -4,6 +4,7 @@ import authRoute from './routes/auth.route.js'
 import userRoute from './routes/user.route.js'
 import postRoute from './routes/post.route.js'
 import commentRoutes from './routes/comment.route.js';
+import path from 'path'
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 const app = express();
@@ -11,11 +12,18 @@ app.use(cors({origin:'http://localhost:5173',credentials:true,methods:["PUT","GE
 connectDB();
 app.use(express.json());
 app.use(cookieParser())
+const __dirname = path.resolve();
 app.use('/api/v1/auth',authRoute)
 app.use('/api/v1/user',userRoute)
 app.use('/api/v1/post', postRoute); 
 app.use('/api/v1/comment', commentRoutes); 
 
+
+app.use(express.static(path.join(__dirname, '/frontend/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+});
 
 app.use((err,req,res,next)=>{
     const statusCode = err.statusCode || 500;
